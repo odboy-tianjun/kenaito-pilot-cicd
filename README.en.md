@@ -61,7 +61,7 @@ kenaito-pilot-cicd/
 
 ```bash
 # Pull the Java base image
-docker pull registry.cn-shanghai.aliyuncs.com/odboy/kenaito-cicd:java11
+docker pull registry.cn-shanghai.aliyuncs.com/odboy/kenaito-cicd:runtime-jdk11
 ```
 
 ### GitLab CI Configuration

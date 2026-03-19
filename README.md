@@ -1,5 +1,3 @@
-
-
 # Kenaito Pilot CI/CD
 
 ## 概述
@@ -63,7 +61,7 @@ kenaito-pilot-cicd/
 
 ```bash
 # 使用 Java 基础镜像
-docker pull registry.cn-shanghai.aliyuncs.com/odboy/kenaito-cicd:java11
+docker pull registry.cn-shanghai.aliyuncs.com/odboy/kenaito-cicd:runtime-jdk11
 ```
 
 ### GitLab CI 配置
