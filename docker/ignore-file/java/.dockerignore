@@ -1,0 +1,9 @@
+target/
+.mvn/
+*.jar
+*.war
+*.log
+.settings/
+.project
+.classpath
+.idea

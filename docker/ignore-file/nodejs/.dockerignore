@@ -1,0 +1,13 @@
+node_modules/
+npm-debug.log*
+yarn-error.log*
+yarn-debug.log*
+.pnpm-debug.log*
+coverage/
+.nyc_output/
+.env
+.env.local
+.env.development
+
+# 如果由 CI 重新构建，则排除本地 dist
+dist/

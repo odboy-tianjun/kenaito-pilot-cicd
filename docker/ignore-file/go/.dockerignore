@@ -1,0 +1,10 @@
+*.test
+*_test.go
+.golangci.yml
+coverage.out
+
+# 开发热重载工具配置
+.air.toml
+
+# 若使用 Go Modules，无需 vendor
+/vendor/
