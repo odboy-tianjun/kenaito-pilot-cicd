@@ -29,7 +29,6 @@ build:
   before_script:
     - mkdir -p ~/.m2
     - echo "<settings><mirrors><mirror><id>aliyunmaven</id><mirrorOf>central</mirrorOf><name>阿里云公共仓库</name><url>https://maven.aliyun.com/repository/public</url></mirror></mirrors></settings>" > ~/.m2/settings.xml
-    - yum install tar -y
   script:
     - pwd
     - echo "开始构建"

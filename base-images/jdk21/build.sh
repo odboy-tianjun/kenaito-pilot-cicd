@@ -34,3 +34,6 @@ echo "JDK重新打包完成: $JDK_OUTPUT"
 
 echo "开始构建镜像: $IMAGE_NAME"
 docker build --progress=plain --no-cache -t $IMAGE_NAME .
+
+echo "清理 $JDK_OUTPUT"
+rm -f $JDK_OUTPUT

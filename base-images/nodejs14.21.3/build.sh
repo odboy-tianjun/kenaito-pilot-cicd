@@ -34,3 +34,6 @@ echo "NODEJS重新打包完成: $NODEJS_OUTPUT"
 
 echo "开始构建镜像: $IMAGE_NAME"
 docker build --progress=plain --no-cache -t $IMAGE_NAME .
+
+echo "清理 $NODEJS_OUTPUT"
+rm -f $NODEJS_OUTPUT

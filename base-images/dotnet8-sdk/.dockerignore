@@ -7,11 +7,7 @@
 Thumbs.db
 # 排除预热产物
 build.sh
-Python-3.9.9.tgz
-Python-3.10.0.tgz
-Python-3.11.13.tgz
-Python-3.12.11.tgz
-Python-3.13.7.tgz
+dotnet-sdk-8.0.403-linux-x64.tar.gz
 # 排除mac临时文件
 ._*
 .DS_Store

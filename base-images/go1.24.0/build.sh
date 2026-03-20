@@ -36,3 +36,6 @@ rm -rf $GO_DIR
 
 echo "开始构建镜像: $IMAGE_NAME"
 docker build --progress=plain --no-cache -t $IMAGE_NAME .
+
+echo "清理 $GO_OUTPUT"
+rm -f $GO_OUTPUT

@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eux
 
-PYTHON_VERSION="3.10.0"
+PYTHON_VERSION="3.9.9"
 PYTHON_FILE="Python-$PYTHON_VERSION.tgz"
 PYTHON_OUTPUT="python3.tgz"
 IMAGE_NAME="registry.cn-shanghai.aliyuncs.com/odboy/kenaito-cicd:runtime-python$PYTHON_VERSION"

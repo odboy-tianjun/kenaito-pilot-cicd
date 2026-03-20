@@ -38,7 +38,7 @@ FROM registry.cn-shanghai.aliyuncs.com/odboy/kenaito-cicd:system-alinux3
 # 镜像标签信息
 LABEL maintainer="tianjun@odboy.cn" \
       version="1.0" \
-      description="Python3 (python-3.10.0)"
+      description="Python3 (python-3.9.9)"
 
 # 设置Python环境变量
 ENV PYTHON_HOME=/usr/local/python3

@@ -11,6 +11,7 @@ LABEL maintainer="tianjun@odboy.cn" \
 
 # 推荐写法
 ENV TZ=Asia/Shanghai
+## 可选：C.UTF-8、en_US.UTF-8、zh_CN.UTF-8
 ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
 

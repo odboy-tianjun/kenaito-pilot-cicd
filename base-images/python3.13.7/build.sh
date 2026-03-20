@@ -1,8 +1,7 @@
 #!/bin/bash
 set -eux
 
-# 可选版本：3.9.9、3.11.13、3.12.11、3.13.7
-PYTHON_VERSION="3.9.9"
+PYTHON_VERSION="3.13.7"
 PYTHON_FILE="Python-$PYTHON_VERSION.tgz"
 PYTHON_OUTPUT="python3.tgz"
 IMAGE_NAME="registry.cn-shanghai.aliyuncs.com/odboy/kenaito-cicd:runtime-python$PYTHON_VERSION"
@@ -22,3 +21,6 @@ tar -czvf $PYTHON_OUTPUT python3
 #./configure --enable-optimizations --with-ssl --prefix=/usr/local/python3
 echo "开始构建镜像: $IMAGE_NAME"
 docker build --progress=plain --no-cache -t $IMAGE_NAME .
+
+echo "清理 $PYTHON_OUTPUT"
+rm -f $PYTHON_OUTPUT
