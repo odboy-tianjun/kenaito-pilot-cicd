@@ -17,6 +17,7 @@ fi
 tar -xzvf $PYTHON_FILE
 mv Python-$PYTHON_VERSION python3
 tar -czvf $PYTHON_OUTPUT python3
+rm -rf python3
 
 #./configure --enable-optimizations --with-ssl --prefix=/usr/local/python3
 echo "开始构建镜像: $IMAGE_NAME"
