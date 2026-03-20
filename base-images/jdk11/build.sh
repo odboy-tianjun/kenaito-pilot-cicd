@@ -24,7 +24,7 @@ rm -f $JDK_DIR/lib/src.zip
 # 重命名
 mv $JDK_DIR java
 
-# 重新打包（去掉无用的文件）
+# 重新打包
 tar -czvf $JDK_OUTPUT java
 
 # 清理解压的目录
@@ -33,4 +33,4 @@ rm -rf java
 echo "JDK重新打包完成: $JDK_OUTPUT"
 
 echo "开始构建镜像: $IMAGE_NAME"
-docker build -t $IMAGE_NAME .
+docker build --progress=plain --no-cache -t $IMAGE_NAME .

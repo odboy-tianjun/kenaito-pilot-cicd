@@ -1,0 +1,13 @@
+.git
+.gitignore
+.idea/
+.vscode/
+*.swp
+*.swo
+Thumbs.db
+# 排除预热产物
+build.sh
+Alibaba_Dragonwell_Standard_8.25.24_x64_linux.tar.gz
+# 排除mac临时文件
+._*
+.DS_Store

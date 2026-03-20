@@ -2,7 +2,7 @@ FROM alibaba-cloud-linux-3-registry.cn-hangzhou.cr.aliyuncs.com/alinux3/alinux3:
 
 LABEL maintainer="tianjun@odboy.cn" \
       version="1.0" \
-      description="基础Alinux3镜像，配置时区并安装常用工具"
+      description="基础Alinux3镜像，配置时区并安装常用工具，附带 Git 2.43.7"
 
 # 这种写法存在问题
 #ENV TZ=Asia/Shanghai \
@@ -23,7 +23,7 @@ RUN set -eux; \
     # 更换镜像源为阿里云公共镜像源
     sed -i 's/mirrors.cloud.aliyuncs.com/mirrors.aliyun.com/g' /etc/yum.repos.d/*.repo; \
     # 安装常用工具
-    yum install -y tar net-tools bind-utils; \
+    yum install -y tar net-tools bind-utils git-2.43.7-1.0.1.al8.x86_64; \
     # 清理yum缓存，减小镜像体积
     yum clean all; \
     rm -rf /var/cache/yum/*

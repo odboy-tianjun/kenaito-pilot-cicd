@@ -1,0 +1,13 @@
+.git
+.gitignore
+.idea/
+.vscode/
+*.swp
+*.swo
+Thumbs.db
+# 排除预热产物
+build.sh
+node-v14.21.3-linux-x64.tar.gz
+# 排除mac临时文件
+._*
+.DS_Store
