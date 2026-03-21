@@ -23,16 +23,15 @@ build:
     pipelineId: $CI_PIPELINE_ID
     commitId: $CI_COMMIT_SHA
     actionType: "build"
-  image: registry.cn-shanghai.aliyuncs.com/odboy/devops:kenaito-maven3-jdk21
-  only:
-    - api
-  before_script:
-    - mkdir -p ~/.m2
-    - echo "<settings><mirrors><mirror><id>aliyunmaven</id><mirrorOf>central</mirrorOf><name>阿里云公共仓库</name><url>https://maven.aliyun.com/repository/public</url></mirror></mirrors></settings>" > ~/.m2/settings.xml
+  image: registry.cn-shanghai.aliyuncs.com/odboy/kenaito-cicd:runtime-maven3-jdk21
+  tags:
+    - builder
+  #  only:
+  #    - api
   script:
     - pwd
     - echo "开始构建"
-    - mvn clean package -DskipTests -Dfile.encoding=UTF-8 -T 1C -s ~/.m2/settings.xml
+    - mvn clean package -DskipTests -Dfile.encoding=UTF-8 -T 1C
     - echo "压缩构建产物"
     - find . -type f -name "$CONTEXT_NAME.jar" | xargs -I {} tar -czvf ${CONTEXT_NAME}.tgz {}
     - echo "根据dockerfile构建镜像"
