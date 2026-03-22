@@ -1,0 +1,62 @@
+# 全局并发设置：最大同时运行的作业数
+concurrent = 1
+# 检查新作业的时间间隔（秒），0表示使用默认值
+check_interval = 0
+
+# 会话服务器配置
+[session_server]
+    # 会话超时时间（秒）
+    session_timeout = 1800
+
+# Runner配置（可以有多个Runner实例）
+[[runners]]
+    # Runner的名称，用于在GitLab中标识此Runner
+    name = "builder"
+    # GitLab实例的URL地址
+    url = "http://219.151.187.115:5000"
+    # Runner的注册令牌，用于与GitLab实例进行身份验证
+    token = "xxx"
+    # 执行器类型，这里使用Docker执行器
+    executor = "docker"
+    # 自定义构建目录配置
+    [runners.custom_build_dir]
+    # 缓存配置
+    [runners.cache]
+        # S3缓存配置
+        [runners.cache.s3]
+        # Google Cloud Storage缓存配置
+        [runners.cache.gcs]
+        # Azure缓存配置
+        [runners.cache.azure]
+    # Docker执行器特定配置
+    [runners.docker]
+        # 是否验证Docker守护进程的TLS证书
+        tls_verify = false
+        # 默认使用的Docker镜像
+        image = "registry.cn-shanghai.aliyuncs.com/odboy/kenaito-cicd:system-alinux3"
+        # Helper镜像，用于辅助操作（可选版本 14.8.3、17.11.4、18.9.0）
+        helper_image = "registry.cn-shanghai.aliyuncs.com/odboy/kenaito-cicd:gitlab-runner-helper-14.8.3"
+        # 特权模式：必须开启，允许容器运行需要特权的操作（如Docker in Docker）
+        privileged = true
+        # 是否禁用入口点覆盖。禁用镜像覆盖entrypoint
+        disable_entrypoint_overwrite = false
+        # 如果发生内存不足 (OOM) 错误，不终止容器中的进程
+        oom_kill_disable = false
+        # 是否禁用缓存
+        disable_cache = false
+        # 挂载的卷，这里将/cache目录挂载为持久化存储
+        volumes = ["/cache"]
+        # 镜像的共享内存大小（以字节为单位），0表示使用Docker默认值
+        shm_size = 0
+        # CPU 数量（在 Docker 1.13 或更高版本中可用）
+        cpus = "1"
+        # 内存软限制：当系统内存紧张时，容器会被限制在此值以下
+        memory_reservation = "512m"
+        # 内存限制：容器可使用的最大内存量
+        memory = "1024m"
+        # 总内存限制：包括交换分区在内的总内存使用量，设置为-1表示不限制
+        memory_swap = "2048m"
+        # 供容器使用的 DNS 服务器列表
+        dns = ["8.8.8.8","223.5.5.5"]
+        # 镜像拉取策略：never，if-not-present或always（默认）查看拉取策略文档中的详细信息您还可以添加多个拉取策略
+        pull_policy = "always"
