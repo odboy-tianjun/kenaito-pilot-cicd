@@ -20,8 +20,6 @@ ADD maven3.tgz /usr/local/
 # 安装配置Maven
 RUN set -eux; \
     yum install -y \
-    # Git版本控制
-    git-2.43.7-1.0.1.al8.x86_64 \
     # 镜像构建
     buildah-1.33.14-2.al8.x86_64; \
     # 创建 Maven 本地仓库目录
