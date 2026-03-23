@@ -1,0 +1,37 @@
+FROM registry.cn-shanghai.aliyuncs.com/odboy/kenaito-cicd:runtime-jdk21
+
+# 应用名称和环境变量
+ENV APP_NAME=kenaito-pilot
+ENV ENV_CODE=daily
+
+# 设置工作目录
+WORKDIR /home/admin/${APP_NAME}
+
+# 添加应用压缩包
+ADD ${APP_NAME}.tgz .
+
+# 暴露应用端口
+EXPOSE 8001
+
+# JVM 启动参数优化
+ENV JAVA_OPTS="-server \
+    -XX:+UseContainerSupport \
+    -XX:InitialRAMPercentage=90.0 \
+    -XX:MaxRAMPercentage=90.0 \
+    -XX:+UseG1GC \
+    -XX:MaxGCPauseMillis=200 \
+    -XX:+ParallelRefProcEnabled \
+    -XX:InitiatingHeapOccupancyPercent=70 \
+    -XX:G1ReservePercent=10 \
+    -XX:+HeapDumpOnOutOfMemoryError \
+    -XX:HeapDumpPath=/home/admin/${APP_NAME}/logs/heapdump.hprof \
+    -XX:ErrorFile=/home/admin/${APP_NAME}/logs/hs_err_pid%p.log \
+    -XX:OnOutOfMemoryError='kill -9 %p' \
+    -Djava.security.egd=file:/dev/./urandom \
+    -Duser.timezone=Asia/Shanghai \
+    -Dfile.encoding=UTF-8 \
+    -Dspring.profiles.active=${ENV_CODE} \
+    -Djava.awt.headless=true"
+
+# 启动 Spring Boot 应用
+ENTRYPOINT ["sh", "-c", "java ${JAVA_OPTS} -jar *.jar"]
