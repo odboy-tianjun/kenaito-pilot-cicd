@@ -1,0 +1,12 @@
+FROM registry.cn-shanghai.aliyuncs.com/odboy/kenaito-cicd:runtime-jdk21
+
+# 应用名称和环境变量
+ENV APP_NAME=kenaito-pilot
+ENV ENV_CODE=daily
+
+# 设置工作目录
+WORKDIR /home/admin/${APP_NAME}
+
+# 添加应用压缩包
+ADD ${APP_NAME}.tgz .
+
