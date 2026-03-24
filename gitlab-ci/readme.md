@@ -8,7 +8,7 @@
 
 ```yaml
 include:
-  - remote: 'https://gitee.com/odboy-tianjun/kenaito-pilot-cicd/raw/master/gitlab/14.8.2/java/maven3-jdk21.yml'
+  - remote: 'https://gitee.com/odboy-tianjun/kenaito-pilot-cicd/raw/master/gitlab-ci/java/maven3-jdk21.yml'
 ```
 
 #### 方式2：项目中直接使用原始配置
