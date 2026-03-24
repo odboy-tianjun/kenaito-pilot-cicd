@@ -11,7 +11,7 @@ WORKDIR /home/admin/${APP_NAME}
 ADD ${APP_NAME}.tgz .
 
 # 暴露应用端口
-EXPOSE 8001
+EXPOSE 8000
 
 # JVM 启动参数优化
 ENV JAVA_OPTS="-server \
