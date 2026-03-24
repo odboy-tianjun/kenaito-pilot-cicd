@@ -4,7 +4,6 @@ set -eux
 JDK_FILE="Alibaba_Dragonwell_Standard_8.25.24_x64_linux.tar.gz"
 JDK_DIR="dragonwell-8.25.24"
 JDK_OUTPUT="java8.tgz"
-IMAGE_NAME="registry.cn-shanghai.aliyuncs.com/odboy/kenaito-cicd:runtime-jdk8"
 
 # 判断文件不存在才下载
 if [ ! -f "$JDK_FILE" ]; then

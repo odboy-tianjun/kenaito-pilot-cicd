@@ -4,7 +4,6 @@ set -eux
 JDK_FILE="openjdk-11.0.2_linux-x64_bin.tar.gz"
 JDK_DIR="jdk-11.0.2"
 JDK_OUTPUT="java11.tgz"
-IMAGE_NAME="registry.cn-shanghai.aliyuncs.com/odboy/kenaito-cicd:runtime-jdk11"
 
 # 判断文件不存在才下载
 if [ ! -f "$JDK_FILE" ]; then
