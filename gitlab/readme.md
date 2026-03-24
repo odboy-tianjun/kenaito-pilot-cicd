@@ -1,2 +1,56 @@
 # Gitlab多版本CI配置
 
+## 使用方法：以Maven3构建Java21举例
+
+#### 方式1：项目中.gitlab-ci.yml直接引用
+
+```yaml
+include:
+  - remote: 'https://gitee.com/odboy-tianjun/kenaito-pilot-cicd/raw/master/gitlab/14.8.2/java/maven3-jdk21.yml'
+```
+
+#### 方式2：项目中直接使用原始配置
+
+```yaml
+variables:
+  # kenaito-pilot平台通过API传递过来的参数
+  # 应用名称
+  CONTEXT_NAME: "kenaito-pilot"
+  # 版本号：格式yyyyMMddHHmmss
+  VERSION_CODE: "default"
+  # 环境编码：测试daily、预发stage、灰度gray、生产production
+  ENV_CODE: "default"
+  # 容器镜像服务
+  CRI_SERVICE_ENDPOINT: "registry.cn-shanghai.aliyuncs.com"
+  CRI_SERVICE_USER: "tianjun@odboy.cn"
+  CRI_SERVICE_PWD: "1234567890"
+
+stages:
+  - build
+
+build:
+  stage: build
+  variables:
+    projectId: $CI_PROJECT_ID
+    projectName: $CI_PROJECT_NAME
+    jobId: $CI_JOB_ID
+    pipelineId: $CI_PIPELINE_ID
+    commitId: $CI_COMMIT_SHA
+    actionType: "build"
+  image: registry.cn-shanghai.aliyuncs.com/odboy/kenaito-cicd:runtime-maven3-jdk21
+  tags:
+    - builder
+  only:
+    - api
+  script:
+    - pwd
+    - echo "开始构建"
+    - mvn clean package -DskipTests -Dfile.encoding=UTF-8 -T 1C
+    - echo "压缩构建产物"
+    - find . -type f -name "$CONTEXT_NAME.jar" | xargs -I {} tar -czvf ${CONTEXT_NAME}.tgz {}
+    - echo "根据dockerfile构建镜像"
+    - buildah build -f Dockerfile -t $CRI_SERVICE_ENDPOINT/odboy/devops:${CONTEXT_NAME}_${ENV_CODE}_${VERSION_CODE} .
+    - echo "推送镜像到aliyun"
+    - echo "$CRI_SERVICE_PWD" | buildah login --tls-verify=false -u $CRI_SERVICE_USER --password-stdin $CRI_SERVICE_ENDPOINT
+    - buildah push --tls-verify=false $CRI_SERVICE_ENDPOINT/odboy/devops:${CONTEXT_NAME}_${ENV_CODE}_${VERSION_CODE}
+```

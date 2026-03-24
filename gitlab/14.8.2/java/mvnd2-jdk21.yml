@@ -26,8 +26,8 @@ build:
   image: registry.cn-shanghai.aliyuncs.com/odboy/kenaito-cicd:runtime-mvnd2-jdk21
   tags:
     - builder
-  #  only:
-  #    - api
+  only:
+    - api
   script:
     - pwd
     - echo "开始构建"
