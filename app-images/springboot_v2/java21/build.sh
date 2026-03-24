@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eux
 
-IMAGE_NAME="registry.cn-shanghai.aliyuncs.com/odboy/kenaito-cicd:runtime-springboot21"
+IMAGE_NAME="registry.cn-shanghai.aliyuncs.com/odboy/kenaito-cicd:java21"
 
 echo "开始构建镜像: $IMAGE_NAME"
 docker build --progress=plain --no-cache -t $IMAGE_NAME .

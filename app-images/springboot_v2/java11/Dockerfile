@@ -1,4 +1,4 @@
-FROM registry.cn-shanghai.aliyuncs.com/odboy/kenaito-cicd:runtime-jdk21
+FROM registry.cn-shanghai.aliyuncs.com/odboy/kenaito-cicd:runtime-jdk11
 
 # ========================================
 # 镜像元数据
@@ -6,7 +6,7 @@ FROM registry.cn-shanghai.aliyuncs.com/odboy/kenaito-cicd:runtime-jdk21
 LABEL maintainer="tianjun@odboy.cn" \
       version="1.0" \
       description="Spring Boot Application Runtime Image" \
-      java.version="21"
+      java.version="11"
 
 # ========================================
 # 环境变量配置
@@ -30,4 +30,4 @@ RUN chmod +x /usr/local/start.sh
 # ========================================
 # 应用启动入口
 # ========================================
-ENTRYPOINT ["sh", "-c", "cp -f /usr/local/start.sh . && ./start.sh"]
+ENTRYPOINT ["sh", "-c", "cp -f /usr/local/start.sh . && ./start.sh && sleep 365d"]

@@ -1,4 +1,4 @@
-FROM registry.cn-shanghai.aliyuncs.com/odboy/kenaito-cicd:runtime-springboot21
+FROM registry.cn-shanghai.aliyuncs.com/odboy/kenaito-cicd:java21
 
 # 应用名称和环境变量
 ENV APP_NAME=kenaito-pilot
