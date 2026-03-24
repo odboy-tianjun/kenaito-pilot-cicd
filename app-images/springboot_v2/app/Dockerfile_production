@@ -1,8 +1,8 @@
-FROM registry.cn-shanghai.aliyuncs.com/odboy/kenaito-cicd:runtime-jdk21
+FROM registry.cn-shanghai.aliyuncs.com/odboy/kenaito-cicd:runtime-springboot21
 
 # 应用名称和环境变量
 ENV APP_NAME=kenaito-pilot
-ENV ENV_CODE=daily
+ENV ENV_CODE=production
 
 # 设置工作目录
 WORKDIR /home/admin/${APP_NAME}
