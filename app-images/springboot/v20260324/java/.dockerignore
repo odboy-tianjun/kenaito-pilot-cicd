@@ -7,10 +7,6 @@
 Thumbs.db
 # 排除预热产物
 build.sh
-Alibaba_Dragonwell_Standard_8.25.24_x64_linux.tar.gz
-openjdk-11.0.2_linux-x64_bin.tar.gz
-openjdk-17.0.2_linux-x64_bin.tar.gz
-openjdk-21.0.2_linux-x64_bin.tar.gz
 # 排除mac临时文件
 ._*
 .DS_Store

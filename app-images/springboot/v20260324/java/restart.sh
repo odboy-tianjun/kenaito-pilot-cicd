@@ -1,6 +1,6 @@
 #!/bin/sh
 # ========================================
-# Spring Boot 应用启动脚本
+# Spring Boot 应用重启脚本
 # ========================================
 set -eux
 
@@ -14,10 +14,9 @@ SPRING_PROFILE=${ENV_CODE}
 # 创建应用目录和日志目录
 # ========================================
 if [ ! -d "logs" ]; then
-    mkdir -p logs
-    chmod 755 logs
+	mkdir -p logs
+	chmod 755 logs
 fi
-
 
 # ========================================
 # 验证目录创建成功
@@ -31,21 +30,22 @@ ls -al
 JAVA_VERSION=$(echo "${JAVA_VERSION}" | tr -d '\r' | tr -d ' ')
 echo "JAVA_VERSION: ${JAVA_VERSION}"
 case "${JAVA_VERSION}" in
-    8)
-        ln -sfn /usr/local/java8 /usr/local/java
-        ;;
-    11)
-        ln -sfn /usr/local/java11 /usr/local/java
-        ;;
-    17)
-        ln -sfn /usr/local/java17 /usr/local/java
-        ;;
-    21)
-        ln -sfn /usr/local/java21 /usr/local/java
-        ;;
-    *)
-        echo "Warning: Unknown JAVA_VERSION=${JAVA_VERSION}, using default java8"
-        ;;
+8)
+  # n特指目录
+	ln -sfn /usr/local/java8 /usr/local/java
+	;;
+11)
+	ln -sfn /usr/local/java11 /usr/local/java
+	;;
+17)
+	ln -sfn /usr/local/java17 /usr/local/java
+	;;
+21)
+	ln -sfn /usr/local/java21 /usr/local/java
+	;;
+*)
+	echo "Warning: Unknown JAVA_VERSION=${JAVA_VERSION}, using default java8"
+	;;
 esac
 
 # 验证Java版本
@@ -76,14 +76,14 @@ JAVA_OPTS="-server \
 
 # 根据JDK版本添加特定参数
 case "${JAVA_VERSION}" in
-    8)
-        # JDK 8: 不需要--add-modules和--add-opens
-        echo "Using JDK 8 specific configuration"
-        ;;
-    11)
-        # JDK 11: 需要add-modules java.xml.bind，但不需要虚拟线程参数
-        echo "Using JDK 11 specific configuration"
-        JAVA_OPTS="${JAVA_OPTS} \
+8)
+	# JDK 8: 不需要--add-modules和--add-opens
+	echo "Using JDK 8 specific configuration"
+	;;
+11)
+	# JDK 11: 需要add-modules java.xml.bind，但不需要虚拟线程参数
+	echo "Using JDK 11 specific configuration"
+	JAVA_OPTS="${JAVA_OPTS} \
     --add-modules java.xml.bind \
     --add-opens java.base/java.lang=ALL-UNNAMED \
     --add-opens java.base/java.io=ALL-UNNAMED \
@@ -95,11 +95,11 @@ case "${JAVA_VERSION}" in
     --add-opens java.base/sun.nio.ch=ALL-UNNAMED \
     --add-opens java.base/sun.security.util=ALL-UNNAMED \
     --add-opens java.base/sun.security.x509=ALL-UNNAMED"
-        ;;
-    17)
-        # JDK 17: 不需要--add-modules java.xml.bind，需要--add-opens
-        echo "Using JDK 17 specific configuration"
-        JAVA_OPTS="${JAVA_OPTS} \
+	;;
+17)
+	# JDK 17: 不需要--add-modules java.xml.bind，需要--add-opens
+	echo "Using JDK 17 specific configuration"
+	JAVA_OPTS="${JAVA_OPTS} \
     --add-opens java.base/java.lang=ALL-UNNAMED \
     --add-opens java.base/java.io=ALL-UNNAMED \
     --add-opens java.base/java.util=ALL-UNNAMED \
@@ -110,11 +110,11 @@ case "${JAVA_VERSION}" in
     --add-opens java.base/sun.nio.ch=ALL-UNNAMED \
     --add-opens java.base/sun.security.util=ALL-UNNAMED \
     --add-opens java.base/sun.security.x509=ALL-UNNAMED"
-        ;;
-    21)
-        # JDK 21: 同JDK 17，并可选启用虚拟线程调度器参数
-        echo "Using JDK 21 specific configuration with virtual threads"
-        JAVA_OPTS="${JAVA_OPTS} \
+	;;
+21)
+	# JDK 21: 同JDK 17，并可选启用虚拟线程调度器参数
+	echo "Using JDK 21 specific configuration with virtual threads"
+	JAVA_OPTS="${JAVA_OPTS} \
     --add-opens java.base/java.lang=ALL-UNNAMED \
     --add-opens java.base/java.io=ALL-UNNAMED \
     --add-opens java.base/java.util=ALL-UNNAMED \
@@ -127,10 +127,10 @@ case "${JAVA_VERSION}" in
     --add-opens java.base/sun.security.x509=ALL-UNNAMED \
     -Djdk.virtualThreadScheduler.parallelism=4 \
     -Djdk.virtualThreadScheduler.maxPoolSize=256"
-        ;;
-    *)
-        echo "Warning: Unknown JAVA_VERSION=${JAVA_VERSION}, using JDK 8 configuration"
-        ;;
+	;;
+*)
+	echo "Warning: Unknown JAVA_VERSION=${JAVA_VERSION}, using JDK 8 configuration"
+	;;
 esac
 
 # ========================================
@@ -139,49 +139,32 @@ esac
 # 查找Java进程（排除当前脚本和grep进程）
 APP_PID=$(pgrep -f "${APP_NAME}.jar" | grep -v $$ | head -1 || true)
 if [ -n "$APP_PID" ]; then
-    echo "Application is already running with PID: $APP_PID, stopping it..."
-    kill -15 "$APP_PID"
-    # 等待进程结束，最多等待30秒
-    for i in $(seq 1 30); do
-        sleep 1
-        # 使用ps检查进程是否还存在
-        CHECK_PID=$(ps -ef | grep -v grep | grep "${APP_NAME}.jar" | awk '{print $2}' | head -1)
-        if [ -z "$CHECK_PID" ]; then
-            echo "Application stopped successfully"
-            break
-        fi
-        echo "Waiting for application to stop... ($i/30)"
-    done
-    # 如果进程还在，强制kill
-    CHECK_PID=$(pgrep -f "${APP_NAME}.jar" | grep -v $$ | head -1 || true)
-    if [ -n "$CHECK_PID" ]; then
-        echo "Application did not stop gracefully, forcing kill..."
-        kill -9 "$CHECK_PID" 2>/dev/null || true
-    fi
+	echo "Application is already running with PID: $APP_PID, stopping it..."
+	kill -15 "$APP_PID"
+	# 等待进程结束，最多等待30秒
+	for i in $(seq 1 30); do
+		sleep 1
+		# 使用ps检查进程是否还存在
+		CHECK_PID=$(ps -ef | grep -v grep | grep "${APP_NAME}.jar" | awk '{print $2}' | head -1)
+		if [ -z "$CHECK_PID" ]; then
+			echo "Application stopped successfully"
+			break
+		fi
+		echo "Waiting for application to stop... ($i/30)"
+	done
+	# 如果进程还在，强制kill
+	CHECK_PID=$(pgrep -f "${APP_NAME}.jar" | grep -v $$ | head -1 || true)
+	if [ -n "$CHECK_PID" ]; then
+		echo "Application did not stop gracefully, forcing kill..."
+		kill -9 "$CHECK_PID" 2>/dev/null || true
+	fi
 fi
 
 # ========================================
 # 启动应用
 # ========================================
-nohup java ${JAVA_OPTS} -jar ${APP_HOME}/${APP_NAME}.jar > /dev/null 2>&1 &
+java ${JAVA_OPTS} -jar ${APP_HOME}/${APP_NAME}.jar &
 
 # 获取Java进程PID
 JAVA_PID=$!
 echo "Java application started with PID: $JAVA_PID"
-
-# ========================================
-# 健康检查：等待应用启动完成。HTTP GET接口 /healthCheck/readiness 一定要有且不需要鉴权
-# ========================================
-echo "Starting health check on http://localhost:${SERVER_PORT}/healthCheck/readiness"
-for i in $(seq 1 30); do
-    HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:${SERVER_PORT}/healthCheck/readiness" || echo "000")
-    echo "Health check attempt $i/30: HTTP status code = $HTTP_CODE"
-    if [ "$HTTP_CODE" = "200" ]; then
-        echo "Application started successfully, health check passed!"
-        break
-    fi
-    if [ $i -eq 30 ]; then
-        echo "Health check failed after 30 attempts, application may not be ready"
-    fi
-    sleep 1
-done

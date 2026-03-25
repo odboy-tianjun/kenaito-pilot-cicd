@@ -4,7 +4,7 @@ FROM registry.cn-shanghai.aliyuncs.com/odboy/kenaito-cicd:runtime-jdk21
 # 镜像元数据
 # ========================================
 LABEL maintainer="tianjun@odboy.cn" \
-      version="1.0" \
+      version="1.0.20260323" \
       description="Spring Boot Application Runtime Image" \
       java.version="21"
 

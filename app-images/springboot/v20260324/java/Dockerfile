@@ -4,7 +4,7 @@ FROM registry.cn-shanghai.aliyuncs.com/odboy/kenaito-cicd:runtime-jdk
 # 镜像元数据
 # ========================================
 LABEL maintainer="tianjun@odboy.cn" \
-      version="1.0" \
+      version="1.0.20260324" \
       description="Spring Boot Application Runtime Image"
 
 # ========================================
@@ -23,10 +23,12 @@ EXPOSE ${SERVER_PORT}
 # ========================================
 # 复制启动脚本
 # ========================================
-COPY start.sh /usr/local/start.sh
-RUN chmod +x /usr/local/start.sh
+COPY start.sh /home/admin/start.sh
+RUN chmod +x /home/admin/start.sh
 
 # ========================================
 # 应用启动入口
 # ========================================
-ENTRYPOINT ["sh", "-c", "cp -f /usr/local/start.sh . && ./start.sh && sleep 365d"]
+#这里注释掉，是因为在start.sh脚本中明确了jar所在的位置
+#ENTRYPOINT ["sh", "-c", "cp -f /usr/local/start.sh . && ./start.sh"]
+ENTRYPOINT ["sh", "-c", "/home/admin/start.sh; while true; do sleep 30d; done"]
