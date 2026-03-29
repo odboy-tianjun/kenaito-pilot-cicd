@@ -1,21 +1,3 @@
-# Gitlab多版本CI配置
-
-> 适用版本：14.8.2、17.11.7、18.7.6，其他版本请自行尝试
-
-## 使用方法：以Maven3构建Java21举例
-
-#### 方式1：项目中.gitlab-ci.yml直接引用
-
-> 建议用最近月份的版本
-
-```yaml
-include:
-  - remote: 'https://gitee.com/odboy-tianjun/kenaito-pilot-cicd/raw/master/gitlab-ci/java/v20260215/maven3-jdk21.yml'
-```
-
-#### 方式2：项目中直接使用原始配置
-
-```yaml
 variables:
   # kenaito-pilot平台通过API传递过来的参数
   # 应用名称
@@ -28,6 +10,10 @@ variables:
   CRI_SERVICE_ENDPOINT: "registry.cn-shanghai.aliyuncs.com"
   CRI_SERVICE_USER: "tianjun@odboy.cn"
   CRI_SERVICE_PWD: "1234567890"
+  # Webhook 地址
+  WEBHOOK_URL: "https://kenaito-pilot-api.odboy.cn/webhooks/gitlab/build"
+  # 镜像名称
+  IMAGE_NAME: "${CRI_SERVICE_ENDPOINT}/odboy/devops:${CONTEXT_NAME}_${ENV_CODE}_${VERSION_CODE}"
 
 stages:
   - build
@@ -40,7 +26,6 @@ build:
     jobId: $CI_JOB_ID
     pipelineId: $CI_PIPELINE_ID
     commitId: $CI_COMMIT_SHA
-    actionType: "build"
   image: registry.cn-shanghai.aliyuncs.com/odboy/kenaito-cicd:runtime-maven3-jdk21
   tags:
     - builder
@@ -53,8 +38,20 @@ build:
     - echo "压缩构建产物"
     - find . -type f -name "$CONTEXT_NAME.jar" | xargs -I {} tar -czvf ${CONTEXT_NAME}.tgz {}
     - echo "根据dockerfile构建镜像"
-    - buildah build -f Dockerfile -t $CRI_SERVICE_ENDPOINT/odboy/devops:${CONTEXT_NAME}_${ENV_CODE}_${VERSION_CODE} .
+    - buildah build -f Dockerfile -t $IMAGE_NAME .
     - echo "推送镜像到aliyun"
     - echo "$CRI_SERVICE_PWD" | buildah login --tls-verify=false -u $CRI_SERVICE_USER --password-stdin $CRI_SERVICE_ENDPOINT
-    - buildah push --tls-verify=false $CRI_SERVICE_ENDPOINT/odboy/devops:${CONTEXT_NAME}_${ENV_CODE}_${VERSION_CODE}
-```
+    - buildah push --tls-verify=false $IMAGE_NAME
+  after_script:
+    - |
+      echo "上报构建状态: ${CI_JOB_STATUS}"
+      curl -L -G "${WEBHOOK_URL}" \
+        -d "projectId=${projectId}" \
+        -d "commitId=${commitId}" \
+        -d "pipelineId=${pipelineId}" \
+        -d "jobId=${jobId}" \
+        -d "contextName=${CONTEXT_NAME}" \
+        -d "versionCode=${VERSION_CODE}" \
+        -d "envCode=${ENV_CODE}" \
+        -d "imageName=${IMAGE_NAME}" \
+        -d "status=$CI_JOB_STATUS"
