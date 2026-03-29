@@ -24,7 +24,8 @@ EXPOSE ${SERVER_PORT}
 # 复制启动脚本
 # ========================================
 COPY start.sh /usr/local/start.sh
-RUN chmod +x /usr/local/start.sh
+COPY stop.sh /usr/local/stop.sh
+RUN chmod +x /usr/local/start.sh && chmod +x /usr/local/stop.sh
 
 # ========================================
 # 应用启动入口
