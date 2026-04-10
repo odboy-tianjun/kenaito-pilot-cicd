@@ -1,0 +1,22 @@
+services:
+  rabbitmq:
+    image: registry.cn-guangzhou.aliyuncs.com/kennylee/rabbitmq:4.0.7-management
+    restart: on-failure
+    container_name: rabbitmq
+    ports:
+      - 15672:15672
+      - 5672:5672
+      - 61613:61613
+    environment:
+      - "RABBITMQ_DEFAULT_USER=admin"
+      - "RABBITMQ_DEFAULT_PASS=admin"
+      - "RABBITMQ_DEFAULT_VHOST=/devstomp"
+    volumes:
+      # 设置数据存储目录
+      - ./data:/var/lib/rabbitmq/mnesia
+      - ./logs:/var/log/rabbitmq
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '30m'
+        max-file: '1'

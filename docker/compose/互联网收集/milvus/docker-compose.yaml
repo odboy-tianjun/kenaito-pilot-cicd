@@ -1,0 +1,13 @@
+version: '3.8'
+name: milvus
+
+services:
+  milvus-standalone:
+    image: milvusdb/milvus:v2.4.17
+    container_name: milvus-standalone
+    ports:
+      - "19530:19530"   # Milvus API 端口
+      - "9091:9091"     # 健康检查端口（已移除健康检查逻辑）
+    volumes:
+      - ./data:/var/lib/milvus  # 数据持久化目录
+    command: ["milvus", "run", "standalone"]
