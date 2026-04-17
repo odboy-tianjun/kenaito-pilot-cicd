@@ -1,0 +1,48 @@
+# ==============================
+# Traefik 离线安装配置
+# 镜像：阿里云（解决国外拉取失败）
+# 模式：LoadBalancer + MetalLB
+# ==============================
+
+# 阿里云镜像
+image:
+  registry: registry.cn-shanghai.aliyuncs.com
+  repository: odboy/kenaito-cicd
+  tag: traefik-v3.5.0
+  pullPolicy: IfNotPresent
+
+# 开启 Dashboard
+ingressRoute:
+  dashboard:
+    enabled: true
+    matchRule: Host(`traefik-dashboard.local`)
+    entryPoints: [ web ]
+
+# 80/443 端口
+entryPoints:
+  web:
+    address: ":80"
+  websecure:
+    address: ":443"
+
+# LoadBalancer + MetalLB 自动分配IP
+service:
+  type: LoadBalancer
+  annotations:
+    metallb.universe.tf/address-pool: l2-pool  # 你的IP池名称
+
+# 开启 K8s Ingress 支持
+providers:
+  kubernetesIngress:
+    enabled: true
+  kubernetesCRD:
+    enabled: true
+
+# 资源限制
+resources:
+  requests:
+    cpu: 500m
+    memory: 1Gi
+  limits:
+    cpu: 2000m
+    memory: 2Gi
