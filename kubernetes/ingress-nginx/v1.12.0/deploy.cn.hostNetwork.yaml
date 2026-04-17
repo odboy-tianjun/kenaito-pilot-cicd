@@ -417,7 +417,7 @@ spec:
         app.kubernetes.io/version: 1.12.0
     spec:
       #共享宿主机的网络协议栈(不给ingress controller分配独立的网路命名空间，与宿主机网络命名空间共享)
-      hostNetwork: True
+      hostNetwork: true
       containers:
       - args:
         - /nginx-ingress-controller
@@ -440,8 +440,7 @@ spec:
               fieldPath: metadata.namespace
         - name: LD_PRELOAD
           value: /usr/local/lib/libmimalloc.so
-        # registry.k8s.io/ingress-nginx/controller:v1.12.0@sha256:e6b8de175acda6ca913891f0f727bca4527e797d52688cbe9fec9040d6f6b6fa
-        image: registry.cn-shanghai.aliyuncs.com/odboy/ingress-nginx-controller:v1.12.0
+        image: registry.cn-shanghai.aliyuncs.com/odboy/kenaito-cicd:ingress-nginx-v1.12.0
         imagePullPolicy: IfNotPresent
         lifecycle:
           preStop:
@@ -543,8 +542,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        # registry.k8s.io/ingress-nginx/kube-webhook-certgen:v1.5.0@sha256:aaafd456bda110628b2d4ca6296f38731a3aaf0bf7581efae824a41c770a8fc4
-        image: registry.cn-shanghai.aliyuncs.com/odboy/ingress-nginx-kube-webhook-certgen:v1.5.0
+        image: registry.cn-shanghai.aliyuncs.com/odboy/kenaito-cicd:ingress-nginx-kube-webhook-certgen-v1.5.0
         imagePullPolicy: IfNotPresent
         name: create
         securityContext:
@@ -598,8 +596,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        # registry.k8s.io/ingress-nginx/kube-webhook-certgen:v1.5.0@sha256:aaafd456bda110628b2d4ca6296f38731a3aaf0bf7581efae824a41c770a8fc4
-        image: registry.cn-shanghai.aliyuncs.com/odboy/ingress-nginx-kube-webhook-certgen:v1.5.0
+        image: registry.cn-shanghai.aliyuncs.com/odboy/kenaito-cicd:ingress-nginx-kube-webhook-certgen-v1.5.0
         imagePullPolicy: IfNotPresent
         name: patch
         securityContext:
