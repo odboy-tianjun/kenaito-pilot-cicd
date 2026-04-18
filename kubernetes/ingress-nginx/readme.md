@@ -41,13 +41,21 @@ kubectl apply -f deploy.cn.yml
 # 启用hostNetwork, 将域名解析到任意节点（因为ingress-nginx是daemonset）就可以访问对应的pod服务
 kubectl apply -f deploy.cn.hostNetwork.yaml
 
-# 观察控制器是否准备就绪
-kubectl wait --namespace ingress-nginx --for=condition=ready pod --selector=app.kubernetes.io/component=controller --timeout=120s
+# 查看命名空间
+kubectl get ns | grep ingress-nginx
+
+# 查看 Pod
+kubectl get pods -n ingress-nginx -o wide
+
+# 查看 Service
+kubectl get svc -n ingress-nginx
 ```
+
+![ip](./202604180916.png)
 
 # deploy.cn 和 deploy.cn.hostNetwork 的区别
 
-- deploy.cn endpoint为内网IP
+- deploy.cn endpoint为内网IP，如果安装了metal-lb，EXTERNAL-IP 应为 metal-lb 分配的宿主机所在区域的ip地址，如上图所示
 
 ```text
 # kubectl describe svc xx
