@@ -1,6 +1,8 @@
 # 裸金属 K8s 集群的 LoadBalancer 实现
 
-自建集群、非云环境推荐使用，不推荐使用hostNetwork
+- 自建集群、非云环境推荐使用
+- 不推荐使用hostNetwork
+- 在ingress插件(比如ingress-nginx、ingress-traefik)之前安装
 
 > 官方文档 https://metallb.io/installation/
 
