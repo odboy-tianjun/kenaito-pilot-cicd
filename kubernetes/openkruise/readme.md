@@ -1,10 +1,14 @@
 # Kubernetes 的扩展套件，主要聚焦于云原生应用的自动化，比如部署、发布、运维以及可用性防护
 
-> 版本选择参考官方文档 https://openkruise.io/zh/docs/installation
+> 官方文档 https://openkruise.io/zh/docs/installation
 
 # 开源地址
 
 https://github.com/openkruise/kruise
+
+# 版本选择
+
+![version](./202604180852.png)
 
 # chart包选择
 
