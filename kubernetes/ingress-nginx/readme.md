@@ -18,6 +18,7 @@ kubectl apply -f deploy.yml
 kubectl apply -f deploy.cn.yml
 
 # 阿里云 && 本地网络 && 测试学习使用
+# 启用hostNetwork, 将域名解析到任意节点（因为ingress-nginx是daemonset）就可以访问对应的pod服务
 kubectl apply -f deploy.cn.hostNetwork.yaml
 
 # 观察控制器是否准备就绪

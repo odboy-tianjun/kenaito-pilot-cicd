@@ -17,12 +17,56 @@ https://github.com/metallb/metallb
 - 节点间网络互通，预留一段同网段、未占用的静态 IP（如 192.168.235.240-192.168.235.250）
 - 关闭 kube-proxy 的 strictARP（非常关键）
 
+#### kube-proxy 存在的情况
+
 ```shell
 kubectl edit configmap kube-proxy -n kube-system
 # 找到并修改：
 # strictARP: false  →  strictARP: true
 # mode: "" → mode: "ipvs"
 kubectl rollout restart daemonset kube-proxy -n kube-system
+```
+
+#### kube-proxy 不存在的情况（本地私有化的k8s集群，就是自建的集群，非云上集群，我这边是单节点私有集群，也就是只有一个master）
+
+> 在每个节点上执行
+
+```shell
+cat /var/lib/kube-proxy/kube-proxy-config.yaml
+vi /var/lib/kube-proxy/kube-proxy-config.yaml
+```
+
+> 确保以下配置生效
+
+```yaml
+kind: KubeProxyConfiguration
+apiVersion: kubeproxy.config.k8s.io/v1alpha1
+mode: "ipvs"
+ipvs:
+  strictARP: True
+```
+
+> 重启kube-proxy
+
+```shell
+sudo systemctl restart kube-proxy
+```
+
+> 执行命令命令
+
+```shell
+# 查看进程，确认重启成功
+ps -ef | grep kube-proxy
+
+# 检查新的配置是否加载（查看日志）
+sudo journalctl -u kube-proxy -n 20
+```
+
+> 验证 strictARP 是否生效
+
+```shell
+# 通过 kube-proxy 的 API 查看配置（默认监听 10249 端口）
+curl 127.0.0.1:10249/configz
 ```
 
 ## 二、安装 MetalLB
@@ -57,7 +101,9 @@ spec:
   addresses:
     - 192.168.235.240-192.168.235.250  # 改为你的网段
 ```
+
 2. 创建 L2Advertisement（Layer2 宣告）-> metallb-l2-adv.yaml
+
 ```yaml
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
@@ -68,7 +114,9 @@ spec:
   ipAddressPools:
     - l2-pool  # 关联上面的 IP 池 
 ```
+
 3. 应用配置
+
 ```shell
 kubectl apply -f metallb-ip-pool.yaml
 kubectl apply -f metallb-l2-adv.yaml
@@ -79,6 +127,7 @@ kubectl get l2advertisements.metallb.io -n metallb-system
 ```
 
 ## 五、创建 LoadBalancer 服务（测试）-> test-lb.yaml
+
 ```yaml
 apiVersion: v1
 kind: Service
@@ -110,6 +159,7 @@ spec:
         - name: nginx
           image: registry.cn-shanghai.aliyuncs.com/odboy/kenaito-cicd:nginx-alpine
 ```
+
 ```shell
 kubectl apply -f test-lb.yaml
 
@@ -117,8 +167,13 @@ kubectl apply -f test-lb.yaml
 kubectl get svc nginx-lb
 # 访问测试：curl http://<EXTERNAL-IP>
 ```
+
+![test](./202604172115.png)
+
 ## 六、常见问题
+
 - EXTERNAL-IP 一直 Pending
+
 ```text
 检查 IP 池网段是否与节点同网段、未占用
 确认 kube-proxy 的 strictARP=true 且已重启
