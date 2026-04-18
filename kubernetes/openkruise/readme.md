@@ -18,7 +18,7 @@ https://github.com/openkruise/kruise
 # 安装脚本
 
 ```shell
-# 安装
+# 安装（需要一段时间才能生效，大概5~10分钟，使用kubectl get，然后tab键，就能看到对应的快捷提示了）
 helm install kruise /root/kruise-1.4.2.cn.tgz
 
 # 升级
