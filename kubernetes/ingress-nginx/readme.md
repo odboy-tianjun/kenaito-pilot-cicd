@@ -16,6 +16,16 @@ https://github.com/kubernetes/ingress-nginx
 | **v1.19 - v1.25** | **v1.10.x 及以下**          | 这是一个比较平稳的兼容区间，大部分版本都能正常工作。                                                                           |
 | **v1.13 - v1.18** | **v0.49.x 及以下**          | 这是较老版本的兼容区间。如果你使用的是 0.x 版本，建议尽快规划升级，避免安全风险。                                                          |
 
+> 以下表为准
+
+| Ingress-NGINX 版本 | 支持的 Kubernetes 版本 | Helm Chart 版本 |
+|:-----------------|:------------------|:--------------|
+| **v1.15.x**      | 1.28 - 1.34+      | 4.15.x        |
+| **v1.14.x**      | 1.28 - 1.33       | 4.14.x        |
+| **v1.13.x**      | 1.29 - 1.33       | 4.13.x        |
+| **v1.12.x**      | 1.28 - 1.32       | 4.12.x        |
+| **v1.11.x**      | 1.26 - 1.30       | 4.11.x        |
+
 # 安装脚本
 
 > https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.15.1/deploy/static/provider/cloud/deploy.yaml
