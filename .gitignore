@@ -9,6 +9,6 @@
 /application.pid
 
 ### 镜像制作过程中的中间产物 ###
-*.tgz
-*.gz
-*.zip
+#*.tgz
+#*.gz
+#*.zip
