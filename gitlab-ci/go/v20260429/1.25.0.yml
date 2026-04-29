@@ -10,8 +10,6 @@ variables:
   CRI_SERVICE_ENDPOINT: "registry.cn-shanghai.aliyuncs.com"
   CRI_SERVICE_USER: "tianjun@odboy.cn"
   CRI_SERVICE_PWD: "1234567890"
-  # Webhook 地址
-  WEBHOOK_URL: "https://kenaito-pilot-api.odboy.cn/webhooks/gitlab/build"
   # 镜像名称
   IMAGE_NAME: "${CRI_SERVICE_ENDPOINT}/odboy/devops:${CONTEXT_NAME}_${ENV_CODE}_${VERSION_CODE}"
 
@@ -26,7 +24,7 @@ build:
     jobId: $CI_JOB_ID
     pipelineId: $CI_PIPELINE_ID
     commitId: $CI_COMMIT_SHA
-  image: registry.cn-shanghai.aliyuncs.com/odboy/kenaito-cicd:runtime-mvnd2-jdk21
+  image: registry.cn-shanghai.aliyuncs.com/odboy/kenaito-cicd:runtime-go1.25.0
   tags:
     - builder
   only:
@@ -34,24 +32,11 @@ build:
   script:
     - pwd
     - echo "开始构建"
-    - mvnd clean package -DskipTests -Dfile.encoding=UTF-8 -T 1C
+    - GOOS=linux GOARCH=amd64 go build -o $CONTEXT_NAME main.go
     - echo "压缩构建产物"
-    - find . -type f -name "$CONTEXT_NAME.jar" | xargs -I {} tar -czvf ${CONTEXT_NAME}.tgz {}
+    - tar -czvf ${CONTEXT_NAME}.tgz $CONTEXT_NAME
     - echo "根据dockerfile构建镜像"
     - buildah build -f Dockerfile_${ENV_CODE} -t $IMAGE_NAME .
     - echo "推送镜像到aliyun"
     - echo "$CRI_SERVICE_PWD" | buildah login --tls-verify=false -u $CRI_SERVICE_USER --password-stdin $CRI_SERVICE_ENDPOINT
     - buildah push --tls-verify=false $IMAGE_NAME
-  after_script:
-    - |
-      echo "上报构建状态: ${CI_JOB_STATUS}"
-      curl -L -G "${WEBHOOK_URL}" \
-        -d "projectId=${projectId}" \
-        -d "commitId=${commitId}" \
-        -d "pipelineId=${pipelineId}" \
-        -d "jobId=${jobId}" \
-        -d "contextName=${CONTEXT_NAME}" \
-        -d "versionCode=${VERSION_CODE}" \
-        -d "envCode=${ENV_CODE}" \
-        -d "imageName=${IMAGE_NAME}" \
-        -d "status=$CI_JOB_STATUS"

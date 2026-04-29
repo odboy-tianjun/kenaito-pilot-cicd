@@ -38,7 +38,7 @@ build:
     - echo "压缩构建产物"
     - find . -type f -name "$CONTEXT_NAME.jar" | xargs -I {} tar -czvf ${CONTEXT_NAME}.tgz {}
     - echo "根据dockerfile构建镜像"
-    - buildah build -f Dockerfile -t $IMAGE_NAME .
+    - buildah build -f Dockerfile_${ENV_CODE} -t $IMAGE_NAME .
     - echo "推送镜像到aliyun"
     - echo "$CRI_SERVICE_PWD" | buildah login --tls-verify=false -u $CRI_SERVICE_USER --password-stdin $CRI_SERVICE_ENDPOINT
     - buildah push --tls-verify=false $IMAGE_NAME
