@@ -1,0 +1,18 @@
+#FROM registry.cn-shanghai.aliyuncs.com/odboy/kenaito-cicd:runtime-dotnet8-sdk
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+
+LABEL maintainer="tianjun@odboy.cn" \
+      version="1.0.20260429" \
+      description=".NET 8 Application Runtime Image - Daily Environment"
+
+ENV TZ=Asia/Shanghai
+ENV ASPNETCORE_ENVIRONMENT=Development
+ENV SERVER_PORT=8000
+
+WORKDIR /home/admin
+
+COPY publish/ /home/admin/
+
+RUN chmod +x /home/admin/*.dll || true
+
+ENTRYPOINT ["dotnet", "kenaito-pilot.dll"]
