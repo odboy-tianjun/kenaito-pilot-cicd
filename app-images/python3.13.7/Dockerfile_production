@@ -1,0 +1,42 @@
+FROM registry.cn-shanghai.aliyuncs.com/odboy/kenaito-cicd:runtime-python3.13.7
+
+# ========================================
+# 镜像元数据
+# ========================================
+LABEL maintainer="tianjun@odboy.cn" \
+      version="1.0.20260429" \
+      description="Python 3.13 Application Runtime Image - Production Environment"
+
+# ========================================
+# 环境变量配置
+# ========================================
+ENV TZ=Asia/Shanghai
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV APP_ENV=production
+ENV SERVER_PORT=8000
+
+# ========================================
+# 暴露应用端口
+# ========================================
+EXPOSE ${SERVER_PORT}
+
+# ========================================
+# 工作目录
+# ========================================
+WORKDIR /home/admin
+
+# ========================================
+# 复制构建产物
+# ========================================
+ADD ${CONTEXT_NAME}.tgz /home/admin/
+
+# ========================================
+# 应用启动入口
+# 如果你的应用入口文件不是 main.py，需要修改 CMD 中的文件名
+# 如果使用 Flask/Django/FastAPI 等框架，启动命令需要相应调整：
+# Flask: CMD ["flask", "run", "--host=0.0.0.0"]
+# Django: CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# FastAPI: CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# ========================================
+CMD ["python", "main.py"]
