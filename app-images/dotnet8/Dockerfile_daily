@@ -6,8 +6,12 @@ LABEL maintainer="tianjun@odboy.cn" \
       description=".NET 8 Application Runtime Image - Daily Environment"
 
 ENV TZ=Asia/Shanghai
+# ASP.NET Core 内置的环境变量，用于标识应用运行的环境
 ENV ASPNETCORE_ENVIRONMENT=Development
+# 应用端口
 ENV SERVER_PORT=8000
+# 暴露应用端口
+EXPOSE ${SERVER_PORT}
 
 WORKDIR /home/admin
 
