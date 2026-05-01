@@ -18,8 +18,11 @@ rpm -ivh gitlab-ce-17.5.2-ce.0.el7.x86_64.rpm
 
 #### 替换配置，修改为你需要的后，执行命令
 ```shell
-gitlab-ctl reconfigure
-gitlab-ctl restart
+# 重新配置
+gitlab-ctl reconfigure && gitlab-ctl restart
+
+# 确认服务状态
+gitlab-ctl status
 ```
 
 #### 首次安装，root密码所在
@@ -48,20 +51,14 @@ ok: run: sidekiq: (pid 49519) 0s
 ```
 #### 调优配置服务清单
 ```text
-[root@localhost gitlab]# gitlab-ctl restart
-ok: run: alertmanager: (pid 49347) 0s
-ok: run: gitaly: (pid 49355) 1s
-ok: run: gitlab-exporter: (pid 49377) 0s
-ok: run: gitlab-kas: (pid 49392) 1s
-ok: run: gitlab-workhorse: (pid 49400) 0s
-ok: run: logrotate: (pid 49414) 0s
-ok: run: nginx: (pid 49420) 1s
-ok: run: node-exporter: (pid 49439) 0s
-ok: run: postgres-exporter: (pid 49444) 1s
-ok: run: postgresql: (pid 49456) 0s
-ok: run: prometheus: (pid 49472) 1s
-ok: run: puma: (pid 49480) 0s
-ok: run: redis: (pid 49498) 0s
-ok: run: redis-exporter: (pid 49505) 1s
-ok: run: sidekiq: (pid 49519) 0s
+gitlab Reconfigured!
+ok: run: gitaly: (pid 56786) 0s
+ok: run: gitlab-exporter: (pid 56805) 1s
+ok: run: gitlab-workhorse: (pid 56809) 0s
+ok: run: logrotate: (pid 56827) 1s
+ok: run: nginx: (pid 56833) 0s
+ok: run: postgresql: (pid 56849) 1s
+ok: run: puma: (pid 56860) 0s
+ok: run: redis: (pid 56871) 0s
+ok: run: sidekiq: (pid 56890) 0s
 ```
