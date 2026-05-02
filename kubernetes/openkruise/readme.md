@@ -19,14 +19,14 @@ https://github.com/openkruise/kruise
 
 ```shell
 # 安装（需要一段时间才能生效，大概5~10分钟，使用kubectl get，然后tab键，就能看到对应的快捷提示了）默认是containerd
-helm install kruise /root/kruise-1.4.2.cn.tgz
+helm install kruise kruise-1.7.5.cn.tgz
 # 如果运行时是docker
-helm install kruise /root/kruise-1.4.2.cn.tgz --namespace kruise-system --set daemon.socketPath=/var/run/docker.sock
+helm install kruise kruise-1.7.5.cn.tgz --namespace kruise-system --create-namespace --set daemon.socketPath=/var/run/docker.sock
 # 如果运行时是containerd
-helm install kruise /root/kruise-1.4.2.cn.tgz --namespace kruise-system --set daemon.socketPath=/run/containerd/containerd.sock
+helm install kruise kruise-1.7.5.cn.tgz --namespace kruise-system --create-namespace --set daemon.socketPath=/run/containerd/containerd.sock
 
 # 升级
-helm upgrade kruise /root/kruise-1.5.5.cn.tgz
+helm upgrade kruise kruise-1.8.3.cn.tgz
 ```
 
 # 验证是否生效（以下是测试流程）
@@ -74,6 +74,17 @@ kubectl delete validatingwebhookconfiguration -l app=kruise --ignore-not-found
 kubectl delete validatingwebhookconfiguration kruise-validating-webhook-configuration
 kubectl delete namespace kruise-daemon-config
 kubectl delete mutatingwebhookconfiguration -l app=kruise --ignore-not-found
+kubectl delete secret -n default sh.helm.release.v1.kruise.v1
+kubectl delete mutatingwebhookconfiguration kruise-mutating-webhook-configuration
+kubectl delete validatingwebhookconfiguration kruise-validating-webhook-configuration --ignore-not-found
+kubectl delete all -n default -l app=kruise --ignore-not-found
+kubectl delete all -n default -l control-plane=controller-manager --ignore-not-found
+kubectl delete daemonset -n default kruise-daemon --ignore-not-found
+kubectl delete deployment -n default kruise-controller-manager --ignore-not-found
+kubectl delete service -n default kruise-webhook-service --ignore-not-found
+kubectl delete secret -n default sh.helm.release.v1.kruise.v1 --ignore-not-found
+kubectl delete secret -n kruise-system -l "owner=helm" --ignore-not-found
+kubectl delete namespace kruise-system --force --grace-period=0
 kubectl get clusterrole | grep kruise | awk '{print $1}' | xargs kubectl delete clusterrole
 kubectl get clusterrolebinding | grep kruise | awk '{print $1}' | xargs kubectl delete clusterrolebinding
 
