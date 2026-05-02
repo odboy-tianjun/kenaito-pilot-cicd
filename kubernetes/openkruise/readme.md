@@ -18,8 +18,12 @@ https://github.com/openkruise/kruise
 # 安装脚本
 
 ```shell
-# 安装（需要一段时间才能生效，大概5~10分钟，使用kubectl get，然后tab键，就能看到对应的快捷提示了）
+# 安装（需要一段时间才能生效，大概5~10分钟，使用kubectl get，然后tab键，就能看到对应的快捷提示了）默认是containerd
 helm install kruise /root/kruise-1.4.2.cn.tgz
+# 如果运行时是docker
+helm install kruise /root/kruise-1.4.2.cn.tgz --namespace kruise-system --set daemon.socketPath=/var/run/docker.sock
+# 如果运行时是containerd
+helm install kruise /root/kruise-1.4.2.cn.tgz --namespace kruise-system --set daemon.socketPath=/run/containerd/containerd.sock
 
 # 升级
 helm upgrade kruise /root/kruise-1.5.5.cn.tgz
@@ -59,4 +63,28 @@ sidecarsets.apps.kruise.io                 2026-04-18T01:19:43Z
 statefulsets.apps.kruise.io                2026-04-18T01:19:43Z
 uniteddeployments.apps.kruise.io           2026-04-18T01:19:43Z
 workloadspreads.apps.kruise.io             2026-04-18T01:19:43Z
+```
+
+# 强制卸载kruise
+```shell
+kubectl delete job -n kruise-system kruise-finalizer --force --grace-period=0
+kubectl delete namespace kruise-system --force --grace-period=0
+kubectl get crd | grep kruise | awk '{print $1}' | xargs kubectl delete crd
+kubectl delete validatingwebhookconfiguration -l app=kruise --ignore-not-found
+kubectl delete validatingwebhookconfiguration kruise-validating-webhook-configuration
+kubectl delete namespace kruise-daemon-config
+kubectl delete mutatingwebhookconfiguration -l app=kruise --ignore-not-found
+kubectl get clusterrole | grep kruise | awk '{print $1}' | xargs kubectl delete clusterrole
+kubectl get clusterrolebinding | grep kruise | awk '{print $1}' | xargs kubectl delete clusterrolebinding
+
+# 检查所有命名空间
+kubectl get ns | grep -E "kruise"
+# 检查 CRD
+kubectl get crd | grep kruise
+# 检查 webhook
+kubectl get validatingwebhookconfiguration,mutatingwebhookconfiguration | grep kruise
+# 检查 RBAC
+kubectl get clusterrole,clusterrolebinding | grep kruise
+# 检查所有 API 资源
+kubectl api-resources | grep kruise
 ```
