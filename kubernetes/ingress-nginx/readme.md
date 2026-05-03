@@ -32,10 +32,10 @@ https://github.com/kubernetes/ingress-nginx
 
 ```shell
 # dockerhub
-kubectl apply -f deploy.yml
+kubectl apply -f deploy.yaml
 
 # 阿里云
-kubectl apply -f deploy.cn.yml
+kubectl apply -f deploy.cn.yaml
 
 # 阿里云 && 本地网络 && 测试学习使用
 # 启用hostNetwork, 将域名解析到任意节点（因为ingress-nginx是daemonset）就可以访问对应的pod服务
